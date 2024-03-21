@@ -18,7 +18,7 @@ sampling_noise <- function(x, noise) {
   return(x + rnorm(length(x), 0, noise))
 }
 
-## estimate post-alpha
+## estimate post-alpha distribution
 obs_count <- data.frame(row.names = noise_dist)
 
 for (noise in noise_dist) {
@@ -30,14 +30,12 @@ for (noise in noise_dist) {
     obs_count[as.character(noise), "upper"]  <- noisy_sample_dist["0.7"]
 }
 
-## calculate residual after kernel smoothing using their code
-## (replace for now with rounding and taking difference .69 & .7)
+## plot differential .69-bin vs .70-bin as a function of noise
 obs_count["0", "lower"] <- 0
 obs_count["noise"] <- noise_dist
 obs_count["difference"] <- obs_count["upper"] - obs_count["lower"]
 obs_count["difference"] <- obs_count["difference"] / n_studies
 
-## plot differential .69-bin vs .70-bin as a function of noise
 library(tidyverse)
 obs_count %>% 
   ggplot(aes(noise, difference)) +
